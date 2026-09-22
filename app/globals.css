@@ -206,6 +206,57 @@ h1 { margin:0; color:#18213a; font-size:clamp(26px,3vw,34px); line-height:1.1; l
 .inspection-layout { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,.62fr); align-items:start; gap:18px; margin-top:24px; }.inspection-form,.decision-card { padding:22px; }.inspection-form>h2 { margin-bottom:16px; }.inspection-form>h2:not(:first-child) { margin-top:28px; }.exam-groups { display:grid; grid-template-columns:1fr 1fr; gap:14px; }.exam-groups fieldset { padding:0; border:0; }.exam-groups legend,.vitals label,.text-field { margin-bottom:8px; color:#626e85; font-size:9px; font-weight:700; }.exam-groups fieldset>div { display:flex; flex-wrap:wrap; gap:6px; }.exam-groups label input { position:absolute; opacity:0; }.exam-groups label span { display:block; padding:7px 9px; border:1px solid #e4e8ef; border-radius:8px; color:#7a8598; font-size:8px; cursor:pointer; }.exam-groups label input:checked+span { border-color:#89a7f5; background:#edf2ff; color:#315ed6; }.vitals { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }.vitals label { position:relative; }.vitals input,.text-field textarea,.form-grid input,.form-grid select,.modal-form input,.modal-form select,.modal-form textarea { width:100%; margin-top:6px; border:1px solid #e1e6ee; border-radius:8px; outline:0; background:#fff; }.vitals input { height:38px; padding:0 55px 0 10px; }.vitals small { position:absolute; right:9px; bottom:11px; color:#a0a9b8; font-size:7px; }.text-field { display:block; margin-top:14px; }.text-field textarea { min-height:70px; padding:10px; resize:vertical; }.decision-card { position:sticky; top:90px; }.decision-card>p { margin:7px 0 18px; color:#929cad; font-size:9px; line-height:1.5; }.decision-option { display:flex; align-items:center; gap:10px; margin:8px 0; padding:12px; border:1px solid #e4e8ef; border-radius:10px; }.decision-option input { accent-color:#3565e8; }.decision-option b,.decision-option small { display:block; }.decision-option b { font-size:10px; }.decision-option small { margin-top:3px; color:#929cad; font-size:8px; }.decision-option.approved:has(input:checked) { border-color:#8bd2ba; background:#eefaf6; }.decision-summary { display:grid; gap:5px; margin:20px 0; padding:14px; border-radius:10px; background:#f7f8fb; }.decision-summary span { color:#929cad; font-size:8px; }.decision-summary b { margin-bottom:8px; font-size:10px; }.full { width:100%; justify-content:center; margin-top:7px; }
 .settings-layout { display:grid; grid-template-columns:190px 1fr; gap:18px; margin-top:28px; }.settings-menu { align-self:start; padding:10px; }.settings-menu button { width:100%; height:38px; padding:0 11px; border:0; border-radius:8px; background:transparent; color:#748095; font-size:9px; text-align:left; }.settings-menu button.selected { background:#edf2ff; color:#315ed6; font-weight:700; }.settings-form { padding:24px; }.form-grid,.modal-form { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px; }.form-grid label,.modal-form label { color:#657087; font-size:9px; font-weight:650; }.form-grid input,.form-grid select,.modal-form input,.modal-form select { height:39px; padding:0 10px; }.form-grid .wide,.modal-form .wide { grid-column:1/-1; }.form-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:22px; padding-top:18px; border-top:1px solid #edf0f4; }
 .modal-backdrop { position:fixed; inset:0; z-index:50; display:grid; place-items:center; padding:20px; background:rgba(19,28,48,.44); backdrop-filter:blur(4px); }.modal-card { position:relative; width:min(610px,100%); max-height:92vh; overflow:auto; padding:25px; border-radius:17px; background:#fff; box-shadow:0 25px 80px rgba(18,28,52,.22); }.modal-card h2 { margin:0; font-size:18px; }.modal-card>p { margin:6px 0 0; color:#8c96a8; font-size:9px; }.modal-close { position:absolute; top:14px; right:14px; width:30px; height:30px; border:0; border-radius:8px; background:#f4f6f9; color:#738097; }.modal-form textarea { min-height:75px; padding:10px; resize:vertical; }.add-inline { margin-top:13px; padding:0; border:0; background:transparent; color:#3565e8; font-size:9px; font-weight:700; }.modal-card footer { display:flex; justify-content:flex-end; gap:8px; margin-top:22px; padding-top:17px; border-top:1px solid #edf0f4; }
+
+/* A shared, one-step-larger type scale for every product section. */
+.eyebrow { font-size:12px; }
+.subhead { font-size:13px; }
+.primary-button { font-size:13px; }
+.secondary-button { font-size:11px; }
+.secondary-button i { font-size:10px; }
+.metrics span { font-size:11px; }
+.metrics small { font-size:10px; }
+.view-tabs button { font-size:12px; }
+.table-head,.patient-table-head,.vaccine-table-head { font-size:10px; }
+.time-cell strong { font-size:14px; }
+.time-cell small,.patient-cell small,.vaccine-cell small { font-size:10.5px; }
+.patient-cell strong,.vaccine-cell strong { font-size:13px; }
+.patient-avatar { font-size:10px; }
+.status { font-size:10.5px; }
+.examine-button { font-size:11px; }
+.table-footer,.table-footer button { font-size:10.5px; }
+.section-head h2,.inspection-form h2,.decision-card h2,.settings-form h2 { font-size:16px; }
+.section-head p,.section-head button,.passport-card .section-head button { font-size:11px; }
+.mini-row>strong { font-size:13px; }
+.mini-row b { font-size:12px; }
+.mini-row small,.donut span { font-size:10px; }
+.legend span { font-size:11px; }
+.calendar-modes button,.transfer-button,.mine-button,.calendar-select select { font-size:12px; }
+.transfer-button b { font-size:11px; }
+.month-navigation h2 { font-size:18px; }
+.month-navigation .today-button { font-size:11px; }
+.month-grid-head span { font-size:10px; }
+.month-cell>time { font-size:12px; }
+.month-event span { font-size:10px; }
+.month-event em,.show-more-events { font-size:9.5px; }
+.inline-search input { font-size:12px; }
+.patient-list-row,.vaccine-list-row { font-size:11px; }
+.report-filter label { font-size:10px; }
+.report-filter div>button,.trend,.progress-row>div { font-size:11px; }
+.bar-chart small { font-size:10px; }
+.vaccine-list-row small { font-size:10px; }
+.back-button { font-size:11px; }
+.profile-hero p,.details dt { font-size:10px; }
+.profile-hero>div>span,.details dd,.history-item b { font-size:12px; }
+.history-item small,.history-item time { font-size:10px; }
+.exam-groups legend,.vitals label,.text-field { font-size:11px; }
+.exam-groups label span { font-size:10px; }
+.vitals small { font-size:9px; }
+.decision-card>p { font-size:11px; }
+.decision-option b,.decision-summary b { font-size:12px; }
+.decision-option small,.decision-summary span { font-size:10px; }
+.settings-menu button,.form-grid label,.modal-form label { font-size:11px; }
+.form-grid input,.form-grid select,.modal-form input,.modal-form select,.modal-form textarea,.text-field textarea,.vitals input { font-size:12px; }
+.modal-card>p,.add-inline { font-size:11px; }
 @media(max-width:1280px){.calendar-topline{grid-template-columns:1fr auto}.calendar-filters{grid-column:1/-1;grid-row:3;justify-content:flex-start;overflow:auto;padding-bottom:4px}.calendar-topline>div:first-child{min-width:0}.calendar-create{grid-column:2;grid-row:1;margin-top:26px}}
 @media(max-width:900px){.dashboard-grid,.profile-layout,.inspection-layout{grid-template-columns:1fr}.decision-card{position:static}.patient-grid{grid-template-columns:minmax(180px,1.5fr) 120px 90px}.patient-grid>*:nth-child(4){display:none}.vaccine-grid{grid-template-columns:minmax(180px,1.5fr) 110px minmax(130px,1fr) 80px}.vaccine-grid>*:nth-child(4),.vaccine-grid>*:nth-child(6){display:none}.report-filter{grid-template-columns:1fr 1fr}.calendar-page-shell{width:calc(100% - 30px)}.month-cell{min-height:136px}}
 @media(max-width:760px){.current-section{display:block}.dashboard-grid,.reports-grid{grid-template-columns:1fr}.profile-hero{grid-template-columns:55px 1fr}.large-avatar{width:55px;height:55px;border-radius:16px}.profile-hero>.secondary-button,.profile-hero>.primary-button{grid-row:2}.details,.exam-groups,.form-grid,.modal-form{grid-template-columns:1fr}.settings-layout{grid-template-columns:1fr}.settings-menu{display:flex;overflow:auto}.settings-menu button{min-width:100px}.report-filter{grid-template-columns:1fr}.patient-grid{grid-template-columns:1fr auto}.patient-grid>*:nth-child(2),.patient-grid>*:nth-child(3),.patient-grid>*:nth-child(4){display:none}.vaccine-grid{grid-template-columns:1fr auto}.vaccine-grid>*:nth-child(2),.vaccine-grid>*:nth-child(3),.vaccine-grid>*:nth-child(4),.vaccine-grid>*:nth-child(5){display:none}.list-toolbar{align-items:stretch;flex-direction:column}.inline-search{width:100%}.vitals{grid-template-columns:1fr}.modal-form .wide,.form-grid .wide{grid-column:auto}.calendar-topline{grid-template-columns:1fr}.calendar-create{grid-column:1;grid-row:2;margin:0;width:max-content}.calendar-filters{grid-row:3}.month-navigation{margin-top:20px}.calendar-page-shell{width:calc(100% - 24px);padding-top:24px}}
