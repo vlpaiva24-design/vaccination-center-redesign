@@ -58,9 +58,85 @@ function Overview({go}:{go:(v:View)=>void}) {
   return <><Title eyebrow="Понедельник, 21 сентября" title="Доброе утро, Азиза" copy="Коротко о работе центра сегодня." action={<button className="primary-button" onClick={()=>go('appointments')}><span>＋</span> Новый приём</button>}/><section className="metrics"><Metric tone="blue" icon="◷" label="Приёмов сегодня" value="24" detail="12 пациентов ожидают"/><Metric tone="green" icon="✓" label="Завершено" value="8" detail="Работа идёт по плану"/><Metric tone="purple" icon="♙" label="Новых пациентов" value="6" detail="За последние 7 дней"/><Metric tone="amber" icon="₸" label="Выручка" value="8,4 млн" detail="+12% к прошлой неделе"/></section><div className="dashboard-grid"><section className="content-card compact-card"><div className="section-head"><div><h2>Ближайшие приёмы</h2><p>Следующие два часа</p></div><button onClick={()=>go('appointments')}>Все приёмы →</button></div>{appointments.slice(0,4).map(a=><div className="mini-row" key={a.time}><strong>{a.time}</strong><span className={`patient-avatar ${a.tone}`}>{a.initials}</span><div><b>{a.name}</b><small>{a.vaccine}</small></div><span className={`status ${a.tone}`}><i/>{a.status}</span></div>)}</section><section className="content-card compact-card"><div className="section-head"><div><h2>Загрузка дня</h2><p>По часам</p></div><button>Неделя ⌄</button></div><div className="donut"><div><strong>67%</strong><span>заполнено</span></div></div><div className="legend"><span><i className="green-dot"/>Завершено <b>8</b></span><span><i className="blue-dot"/>Запланировано <b>12</b></span><span><i className="amber-dot"/>Свободно <b>6</b></span></div></section></div></>;
 }
 
+type CalendarEntry = { name:string; time:string; tone:'blue'|'purple'|'pink'; vaccine:string; cancelled?:boolean };
+
+const calendarEntries: Record<number, CalendarEntry[]> = {
+  1: [{name:'Малика Каримова',time:'15:00',tone:'purple',vaccine:'Инфлювак Тетра'}],
+  2: [{name:'Сабина Абдуллаева',time:'10:30',tone:'blue',vaccine:'Hexaxim'},{name:'Давид Ли',time:'14:00',tone:'purple',vaccine:'Превенар 13'},{name:'Валентина Пак',time:'15:00',tone:'blue',vaccine:'Гепатит A'},{name:'Алина Юсупова',time:'16:00',tone:'purple',vaccine:'Гардасил'}],
+  3: [{name:'Азиз Рахматуллаев',time:'11:00',tone:'blue',vaccine:'Инфлювак Тетра'},{name:'Мухаммад Алиев',time:'11:40',tone:'purple',vaccine:'Hexaxim'},{name:'Самира Алиева',time:'13:30',tone:'blue',vaccine:'КПК'},{name:'Тимур Ахмедов',time:'14:00',tone:'purple',vaccine:'Гепатит A'},{name:'Малика Каримова',time:'14:55',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Элёр Собиров',time:'16:00',tone:'blue',vaccine:'Превенар 13'}],
+  4: [{name:'Жобир Эргашев',time:'10:00',tone:'purple',vaccine:'Hexaxim'},{name:'Давид Ли',time:'10:00',tone:'purple',vaccine:'Превенар 13'},{name:'Алина Юсупова',time:'14:00',tone:'purple',vaccine:'Гардасил'},{name:'Азиз Турдиев',time:'15:50',tone:'blue',vaccine:'КПК'},{name:'Мухаммад Алиев',time:'16:30',tone:'blue',vaccine:'Гепатит A'}],
+  5: [{name:'Сабина Абдуллаева',time:'10:00',tone:'blue',vaccine:'Hexaxim'},{name:'Азиз Рахматуллаев',time:'12:00',tone:'blue',vaccine:'Инфлювак Тетра'},{name:'Малика Каримова',time:'12:00',tone:'blue',vaccine:'Гепатит A'},{name:'Тимур Ахмедов',time:'14:00',tone:'purple',vaccine:'КПК'},{name:'Давид Ли',time:'15:00',tone:'purple',vaccine:'Превенар 13'}],
+  7: [{name:'Элёр Собиров',time:'10:00',tone:'purple',vaccine:'Hexaxim'},{name:'Сабина Абдуллаева',time:'11:15',tone:'blue',vaccine:'Инфлювак Тетра'},{name:'Алина Юсупова',time:'14:00',tone:'purple',vaccine:'Гардасил'},{name:'Малика Каримова',time:'17:00',tone:'purple',vaccine:'Гепатит A'},{name:'Жобир Эргашев',time:'18:00',tone:'purple',vaccine:'КПК'}],
+  8: [{name:'Валентина Пак',time:'10:00',tone:'purple',vaccine:'Hexaxim'},{name:'Камила Сейтмурова',time:'13:00',tone:'purple',vaccine:'Превенар 13'},{name:'Азиз Турдиев',time:'15:00',tone:'pink',vaccine:'Гепатит A',cancelled:true}],
+  9: [{name:'Азиз Турдиев',time:'11:00',tone:'blue',vaccine:'КПК'},{name:'Сабина Абдуллаева',time:'11:00',tone:'blue',vaccine:'Hexaxim'},{name:'Давид Ли',time:'15:00',tone:'purple',vaccine:'Превенар 13'},{name:'Мухаммад Алиев',time:'16:00',tone:'blue',vaccine:'Гепатит A'},{name:'Камила Сейтмурова',time:'18:00',tone:'purple',vaccine:'Инфлювак Тетра'}],
+  10: [{name:'Жобир Эргашев',time:'10:00',tone:'purple',vaccine:'Hexaxim'},{name:'Камила Сейтмурова',time:'11:00',tone:'purple',vaccine:'КПК'},{name:'Сабина Абдуллаева',time:'14:00',tone:'blue',vaccine:'Инфлювак Тетра'},{name:'Давид Ли',time:'14:00',tone:'purple',vaccine:'Превенар 13'},{name:'Алина Юсупова',time:'16:00',tone:'purple',vaccine:'Гардасил'}],
+  11: [{name:'Жобир Эргашев',time:'09:30',tone:'purple',vaccine:'Hexaxim'},{name:'Бахтиёр Сайитов',time:'11:00',tone:'purple',vaccine:'КПК'},{name:'Азиз Турдиев',time:'11:10',tone:'blue',vaccine:'Гепатит A'},{name:'Камила Сейтмурова',time:'11:45',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Мухаммад Алиев',time:'13:00',tone:'blue',vaccine:'Превенар 13'}],
+  12: [{name:'Жобир Эргашев',time:'15:00',tone:'blue',vaccine:'Hexaxim'},{name:'Бахтиёр Сайитов',time:'15:00',tone:'blue',vaccine:'КПК'}],
+  14: [{name:'Сабина Абдуллаева',time:'09:00',tone:'purple',vaccine:'Hexaxim'},{name:'Малика Каримова',time:'10:00',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Азиз Турдиев',time:'15:00',tone:'blue',vaccine:'Гепатит A'}],
+  15: [{name:'Мухаммад Алиев',time:'10:00',tone:'pink',vaccine:'Превенар 13',cancelled:true},{name:'Диёр Рузметов',time:'10:30',tone:'purple',vaccine:'Hexaxim'},{name:'Элёр Собиров',time:'11:00',tone:'purple',vaccine:'КПК'},{name:'Сабина Абдуллаева',time:'12:00',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Малика Каримова',time:'15:00',tone:'pink',vaccine:'Гепатит A',cancelled:true}],
+  16: [{name:'Мухаммад Алиев',time:'10:00',tone:'purple',vaccine:'Превенар 13'},{name:'Сардор Эргашев',time:'11:00',tone:'purple',vaccine:'Hexaxim'},{name:'Бахтиёр Сайитов',time:'16:30',tone:'purple',vaccine:'КПК'},{name:'Жобир Эргашев',time:'16:30',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Алина Юсупова',time:'18:00',tone:'purple',vaccine:'Гардасил'}],
+  17: [{name:'Жобир Эргашев',time:'13:30',tone:'purple',vaccine:'Hexaxim'},{name:'Сабина Абдуллаева',time:'14:00',tone:'purple',vaccine:'КПК'},{name:'Малика Каримова',time:'16:00',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Азиз Турдиев',time:'16:00',tone:'blue',vaccine:'Гепатит A'},{name:'Сардор Эргашев',time:'17:00',tone:'blue',vaccine:'Превенар 13'}],
+  18: [{name:'Сабина Абдуллаева',time:'14:30',tone:'purple',vaccine:'Hexaxim'},{name:'Малика Каримова',time:'15:00',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Мухаммад Алиев',time:'16:00',tone:'purple',vaccine:'Превенар 13'},{name:'Элёр Собиров',time:'17:00',tone:'purple',vaccine:'КПК'}],
+  19: [{name:'Сардор Эргашев',time:'12:04',tone:'purple',vaccine:'Гепатит A'}],
+  21: [{name:'Сабина Абдуллаева',time:'10:00',tone:'purple',vaccine:'Hexaxim'},{name:'Азиз Турдиев',time:'12:00',tone:'purple',vaccine:'Гепатит A'},{name:'Малика Каримова',time:'13:30',tone:'purple',vaccine:'Инфлювак Тетра'},{name:'Алина Юсупова',time:'14:30',tone:'blue',vaccine:'Гардасил'},{name:'Давид Ли',time:'16:00',tone:'blue',vaccine:'Превенар 13'}],
+  22: [{name:'Бахтиёр Сайитов',time:'11:00',tone:'purple',vaccine:'КПК'},{name:'Элёр Собиров',time:'12:00',tone:'purple',vaccine:'Hexaxim'},{name:'Алина Юсупова',time:'16:00',tone:'purple',vaccine:'Гардасил'},{name:'Сардор Эргашев',time:'16:00',tone:'purple',vaccine:'Гепатит A'}],
+  23: [{name:'Сабина Абдуллаева',time:'09:15',tone:'purple',vaccine:'Hexaxim'},{name:'Элёр Собиров',time:'10:00',tone:'purple',vaccine:'КПК'},{name:'Малика Каримова',time:'15:00',tone:'blue',vaccine:'Инфлювак Тетра'},{name:'Мухаммад Алиев',time:'16:00',tone:'purple',vaccine:'Превенар 13'}],
+  24: [{name:'Бахтиёр Сайитов',time:'16:00',tone:'purple',vaccine:'КПК'}],
+  28: [{name:'Давид Ли',time:'17:00',tone:'purple',vaccine:'Превенар 13'}],
+};
+
 function Calendar({onNew,onInspection}:{onNew:()=>void;onInspection:()=>void}) {
-  const days=['Пн 21','Вт 22','Ср 23','Чт 24','Пт 25','Сб 26'];
-  return <><Title eyebrow="Расписание клиники" title="Календарь" copy="Неделя 21–26 сентября 2026." action={<button className="primary-button" onClick={onNew}><span>＋</span> Новый приём</button>}/><section className="content-card calendar-card"><div className="calendar-toolbar"><div><button>‹</button><button>›</button><button>Сегодня</button></div><h2>21–26 сентября</h2><div className="view-tabs"><button>День</button><button className="selected">Неделя</button><button>Месяц</button></div></div><div className="week-grid"><div className="time-axis"><span/><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span></div>{days.map((d,di)=><div className="day-column" key={d}><strong className={di===0?'today':''}>{d}</strong>{di<4&&<><button className={`calendar-event ${di%2?'mint':'blue-event'}`} style={{top:`${54+di*34}px`}} onClick={onInspection}><b>{['09:00','09:30','10:15','10:45'][di]}</b><span>{appointments[di].name}</span><small>{appointments[di].vaccine}</small></button><button className="calendar-event violet" style={{top:`${174+di*18}px`}} onClick={onInspection}><b>{['11:00','11:30','12:00','12:30'][di]}</b><span>{appointments[(di+1)%4].name}</span><small>Осмотр</small></button></>}</div>)}</div></section></>;
+  const [activeMonth,setActiveMonth] = useState(8);
+  const [mode,setMode] = useState('Месяц');
+  const [mineOnly,setMineOnly] = useState(false);
+  const [expandedDay,setExpandedDay] = useState<number|null>(null);
+  const monthNames=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const weekdayNames=['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
+  const firstDay=new Date(2026,activeMonth,1);
+  const startOffset=(firstDay.getDay()+6)%7;
+  const daysInMonth=new Date(2026,activeMonth+1,0).getDate();
+  const totalCells=Math.ceil((startOffset+daysInMonth)/7)*7;
+  const days=Array.from({length:totalCells},(_,index)=>new Date(2026,activeMonth,1-startOffset+index));
+  const moveMonth=(direction:number)=>{ setActiveMonth(m=>(m+direction+12)%12); setExpandedDay(null); };
+
+  return <section className="month-calendar-page">
+    <div className="calendar-topline">
+      <div><p className="eyebrow">Расписание клиники</p><h1>Календарь</h1><p className="subhead">Приёмы и вакцинации команды</p></div>
+      <button className="primary-button calendar-create" onClick={onNew}><span>＋</span> Новый приём</button>
+      <div className="calendar-filters">
+        <div className="calendar-modes">{['День','Неделя','Месяц','Список'].map(item=><button key={item} className={mode===item?'active':''} onClick={()=>setMode(item)}>{item}</button>)}</div>
+        <button className="transfer-button">Переносы <b>11</b></button>
+        <label className="calendar-select"><select aria-label="Врач"><option>Все врачи</option><option>Азиза Шарипова</option><option>Дилором Касымова</option></select></label>
+        <button className={`mine-button ${mineOnly?'active':''}`} onClick={()=>setMineOnly(v=>!v)}>Только мои</button>
+        <label className="calendar-select compact"><select aria-label="Статус"><option>Все статусы</option><option>Подтверждён</option><option>Ожидает</option><option>Отменён</option></select></label>
+        <label className="calendar-select compact"><select aria-label="Формат"><option>Все кабинеты</option><option>Кабинет 1</option><option>Кабинет 2</option></select></label>
+      </div>
+    </div>
+
+    <div className="month-navigation">
+      <button aria-label="Предыдущий месяц" onClick={()=>moveMonth(-1)}>‹</button>
+      <button aria-label="Следующий месяц" onClick={()=>moveMonth(1)}>›</button>
+      <h2>{monthNames[activeMonth]} <span>2026</span></h2>
+      <button className="today-button" onClick={()=>setActiveMonth(8)}>Сегодня</button>
+    </div>
+
+    <div className="month-board">
+      <div className="month-grid-head">{weekdayNames.map(day=><span key={day}>{day}</span>)}</div>
+      <div className="month-grid">{days.map((date,index)=>{
+        const current=date.getMonth()===activeMonth;
+        const dayNumber=date.getDate();
+        const isToday=current&&activeMonth===8&&dayNumber===22;
+        const entries=current&&activeMonth===8 ? calendarEntries[dayNumber]??[] : [];
+        const visible=expandedDay===dayNumber ? entries : entries.slice(0,4);
+        return <article className={`month-cell ${current?'':'outside'} ${isToday?'today':''}`} key={`${date.getFullYear()}-${date.getMonth()}-${dayNumber}-${index}`}>
+          <time>{isToday?<b>{dayNumber}</b>:dayNumber}</time>
+          <div className="month-events">{visible.map((entry,eventIndex)=><button className={`month-event ${entry.cancelled?'cancelled':''}`} onClick={onInspection} title={`${entry.name} · ${entry.vaccine} · ${entry.time}`} key={`${entry.name}-${entry.time}-${eventIndex}`}><i className={entry.tone}/><span>{entry.name}</span><em>{entry.time}</em></button>)}</div>
+          {entries.length>4&&expandedDay!==dayNumber&&<button className="show-more-events" onClick={()=>setExpandedDay(dayNumber)}>показать все {entries.length}</button>}
+          {entries.length>4&&expandedDay===dayNumber&&<button className="show-more-events" onClick={()=>setExpandedDay(null)}>свернуть</button>}
+        </article>;
+      })}</div>
+    </div>
+  </section>;
 }
 
 function Patients({onProfile,onNew}:{onProfile:()=>void;onNew:()=>void}) {
@@ -98,5 +174,5 @@ export default function VaccineApp() {
   const [modal,setModal] = useState<null|'appointment'|'patient'|'vaccine'>(null);
   const title = useMemo(()=>nav.find(n=>n.id===view)?.label || (view==='profile'?'Карточка пациента':view==='inspection'?'Осмотр':'Настройки'),[view]);
   const go=(v:View)=>{ setPrevious(view); setView(v); window.scrollTo({top:0,behavior:'smooth'}); };
-  return <main className="app-shell"><aside className="sidebar"><div className="brand"><span className="brand-mark">+</span><span><strong>Novotek</strong><small>Vaccination Center</small></span></div><nav><p className="nav-label">Рабочее пространство</p>{nav.map(n=><button key={n.id} className={`nav-item ${view===n.id?'active':''}`} onClick={()=>go(n.id)}><span>{n.icon}</span>{n.label}{n.id==='appointments'&&<b>12</b>}</button>)}<p className="nav-label nav-label-secondary">Управление</p><button className={`nav-item ${view==='settings'?'active':''}`} onClick={()=>go('settings')}><span>⚙</span>Настройки</button></nav><div className="clinic-card"><span className="clinic-icon">N</span><span><strong>Клиника Novotek</strong><small>Ташкент · открыт</small></span><button>⌄</button></div></aside><section className="workspace"><header className="topbar"><div className="mobile-logo"><span className="brand-mark">+</span> Novotek</div><label className="global-search"><span>⌕</span><input placeholder="Найти пациента, приём или вакцину"/><kbd>⌘ K</kbd></label><span className="current-section">{title}</span><div className="profile-actions"><button className="icon-button">♢<i/></button><span className="avatar">АШ</span><span className="profile-copy"><strong>Азиза Шарипова</strong><small>Администратор</small></span><button className="plain-button">⌄</button></div></header><div className="page">{view==='overview'&&<Overview go={go}/>} {view==='calendar'&&<Calendar onNew={()=>setModal('appointment')} onInspection={()=>go('inspection')}/>} {view==='appointments'&&<Appointments onNew={()=>setModal('appointment')} onProfile={()=>go('profile')} onInspection={()=>go('inspection')}/>} {view==='patients'&&<Patients onProfile={()=>go('profile')} onNew={()=>setModal('patient')}/>} {view==='reports'&&<Reports/>} {view==='vaccines'&&<Vaccines onNew={()=>setModal('vaccine')}/>} {view==='profile'&&<Profile back={()=>go(previous==='inspection'?'appointments':previous)} onInspection={()=>go('inspection')}/>} {view==='inspection'&&<Inspection back={()=>go('appointments')}/>} {view==='settings'&&<Settings/>}</div></section>{modal&&<Modal type={modal} onClose={()=>setModal(null)} onSwitch={()=>setModal('patient')}/>}</main>;
+  return <main className="app-shell"><aside className="sidebar"><div className="brand"><span className="brand-mark">+</span><span><strong>Novotek</strong><small>Vaccination Center</small></span></div><nav><p className="nav-label">Рабочее пространство</p>{nav.map(n=><button key={n.id} className={`nav-item ${view===n.id?'active':''}`} onClick={()=>go(n.id)}><span>{n.icon}</span>{n.label}{n.id==='appointments'&&<b>12</b>}</button>)}<p className="nav-label nav-label-secondary">Управление</p><button className={`nav-item ${view==='settings'?'active':''}`} onClick={()=>go('settings')}><span>⚙</span>Настройки</button></nav><div className="clinic-card"><span className="clinic-icon">N</span><span><strong>Клиника Novotek</strong><small>Ташкент · открыт</small></span><button>⌄</button></div></aside><section className="workspace"><header className="topbar"><div className="mobile-logo"><span className="brand-mark">+</span> Novotek</div><label className="global-search"><span>⌕</span><input placeholder="Найти пациента, приём или вакцину"/><kbd>⌘ K</kbd></label><span className="current-section">{title}</span><div className="profile-actions"><button className="icon-button">♢<i/></button><span className="avatar">АШ</span><span className="profile-copy"><strong>Азиза Шарипова</strong><small>Администратор</small></span><button className="plain-button">⌄</button></div></header><div className={`page ${view==='calendar'?'calendar-page-shell':''}`}>{view==='overview'&&<Overview go={go}/>} {view==='calendar'&&<Calendar onNew={()=>setModal('appointment')} onInspection={()=>go('inspection')}/>} {view==='appointments'&&<Appointments onNew={()=>setModal('appointment')} onProfile={()=>go('profile')} onInspection={()=>go('inspection')}/>} {view==='patients'&&<Patients onProfile={()=>go('profile')} onNew={()=>setModal('patient')}/>} {view==='reports'&&<Reports/>} {view==='vaccines'&&<Vaccines onNew={()=>setModal('vaccine')}/>} {view==='profile'&&<Profile back={()=>go(previous==='inspection'?'appointments':previous)} onInspection={()=>go('inspection')}/>} {view==='inspection'&&<Inspection back={()=>go('appointments')}/>} {view==='settings'&&<Settings/>}</div></section>{modal&&<Modal type={modal} onClose={()=>setModal(null)} onSwitch={()=>setModal('patient')}/>}</main>;
 }
