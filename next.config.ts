@@ -1,5 +1,19 @@
 import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {};
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+const repositoryName =
+  process.env.GITHUB_REPOSITORY?.split('/')[1] ??
+  'vaccination-center-redesign';
+const basePath = isGitHubPages ? `/${repositoryName}` : '';
+
+const nextConfig: NextConfig = {
+  output: isGitHubPages ? 'export' : undefined,
+  basePath,
+  assetPrefix: basePath || undefined,
+  trailingSlash: isGitHubPages,
+  images: {
+    unoptimized: isGitHubPages,
+  },
+};
 
 export default nextConfig;

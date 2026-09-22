@@ -1,19 +1,12 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  'https://novotek-vaccination-center.vl-p-aiva24.chatgpt.site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://novotek-vaccination-center.vl-p-aiva24.chatgpt.site'),
+  metadataBase: new URL(siteUrl),
   title: 'Novotek — центр вакцинации',
   description: 'Современная система управления центром вакцинации',
   openGraph: {
@@ -30,11 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
